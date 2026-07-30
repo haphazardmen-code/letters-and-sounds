@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#FFC93C">
+<link rel="icon" href="icon-192.png">
+<title>Letters &amp; Sounds — Book 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky:#EAF6FF;
+    --sky-deep:#CDEBFF;
+    --navy:#1B3A4B;
+    --sun:#FFC93C;
+    --sun-deep:#F5A623;
+    --coral:#FF6F59;
+    --coral-deep:#E85A45;
+    --mint:#3FCDB4;
+    --mint-deep:#2FB39C;
+    --card:#FFFFFF;
+    --lilac:#B98CE8;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;}
+  body{
+    background:linear-gradient(180deg,var(--sky) 0%, var(--sky-deep) 100%);
+    font-family:'Nunito',sans-serif;
+    color:var(--navy);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    min-height:100dvh;
+    padding:20px;
+  }
+  .stage{
+    width:100%;
+    max-width:960px;
+    aspect-ratio:16/9;
+    background:var(--card);
+    border-radius:28px;
+    box-shadow:0 20px 50px rgba(27,58,75,0.18), 0 2px 0 rgba(27,58,75,0.05);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+  @media (max-width:640px){
+    body{ padding:0; align-items:stretch; }
+    .stage{
+      max-width:none; aspect-ratio:auto; width:100vw;
+      min-height:100vh; min-height:100dvh;
+      border-radius:0; box-shadow:none;
+    }
+  }
+  header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 22px; background:var(--sun); flex-shrink:0; gap:10px;
+  }
+  .letter-badge{
+    width:52px;height:52px;border-radius:16px;
+    background:var(--card);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Baloo 2',sans-serif;
+    font-weight:800;font-size:28px;color:var(--coral-deep);
+    box-shadow:0 3px 0 rgba(27,58,75,0.15);
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .header-title{ font-family:'Baloo 2',sans-serif; font-weight:700; font-size:18px; }
+  .header-sub{ font-size:12px; font-weight:700; color:rgba(27,58,75,0.65); }
+  .header-left{display:flex;align-items:center;gap:12px;min-width:0;}
+  .header-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+  .progress-dots{display:flex;gap:6px;align-items:center;}
+  .dot{width:9px;height:9px;border-radius:50%;background:rgba(27,58,75,0.18);}
+  .dot.filled{background:var(--coral);}
+  .icon-btn{
+    display:flex;align-items:center;gap:6px;
+    background:var(--card); border:none;border-radius:14px;
+    padding:8px 12px;
+    font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;
+    color:var(--navy); cursor:pointer;
+    box-shadow:0 3px 0 rgba(27,58,75,0.12);
+    white-space:nowrap;
+  }
+  .icon-btn:active{transform:translateY(2px);box-shadow:none;}
+  main{
+    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:26px; overflow:auto; gap:16px; text-align:center;
+  }
+  .eyebrow{ font-weight:800; letter-spacing:0.06em; text-transform:uppercase; font-size:12px; color:var(--coral-deep); }
+  h1.screen-title{ font-family:'Baloo 2',sans-serif; font-size:clamp(22px,3.4vw,32px); margin:0; }
+  .lede{ font-size:15px; color:rgba(27,58,75,0.75); max-width:480px; line-height:1.5; margin:0; }
+  .hero-letter{
+    font-family:'Baloo 2',sans-serif; font-weight:800; font-size:110px; line-height:1;
+    color:var(--coral); cursor:pointer; user-select:none; transition:transform 0.15s ease;
+  }
+  .hero-letter:active{transform:scale(0.92);}
+  .name-pill{
+    font-family:'Nunito',sans-serif; font-style:italic; font-weight:700; font-size:15px;
+    letter-spacing:0.02em; color:rgba(27,58,75,0.65); background:var(--sky);
+    border:none;border-radius:20px; padding:7px 18px; cursor:pointer; margin-top:-6px;
+  }
+  .name-pill:active{transform:scale(0.95);}
+  .hero-word-card{
+    display:flex;align-items:center;gap:14px; background:var(--sky); border-radius:20px;
+    padding:16px 26px; cursor:pointer; border:3px solid transparent;
+    transition:transform 0.12s ease, border-color 0.12s ease;
+  }
+  .hero-word-card:hover{border-color:var(--sun);}
+  .hero-word-card:active{transform:scale(0.96);}
+  .hero-word-emoji{font-size:44px;}
+  img.hero-word-emoji{ width:44px; height:44px; object-fit:contain; display:block; }
+  .hero-word-label{ font-family:'Baloo 2',sans-serif; font-weight:700;font-size:22px; text-transform:capitalize; }
+  .tap-hint{font-size:12px;font-weight:700;color:rgba(27,58,75,0.5);}
+  .card-grid{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; width:100%; max-width:560px; }
+  .picture-card{
+    background:var(--sky); border-radius:18px; padding:14px 8px 10px;
+    display:flex;flex-direction:column;align-items:center;gap:6px; cursor:pointer;
+    border:3px solid transparent; transition:transform 0.12s ease, border-color 0.12s ease, background 0.15s ease;
+    position:relative;
+  }
+  .picture-card:active{transform:scale(0.94);}
+  .picture-card .emoji{font-size:38px;}
+  .picture-card img.emoji{ width:56px; height:56px; object-fit:contain; }
+  .picture-card .label{ font-weight:700;font-size:12px; text-transform:capitalize; color:rgba(27,58,75,0.7); }
+  .picture-card.correct{background:var(--mint);border-color:var(--mint-deep);}
+  .picture-card.correct .label{color:#fff;}
+  .picture-card.wrong{background:#FFE3DD;border-color:var(--coral);}
+  .picture-card.disabled{pointer-events:none;opacity:0.55;}
+  .picture-card .src-tag{
+    position:absolute; top:4px; left:6px; font-size:9px; font-weight:800;
+    color:rgba(27,58,75,0.35); text-transform:uppercase;
+  }
+  .btn{
+    font-family:'Baloo 2',sans-serif; font-weight:700; font-size:16px; border:none; border-radius:16px;
+    padding:13px 30px; cursor:pointer; color:#fff; background:var(--coral);
+    box-shadow:0 4px 0 var(--coral-deep); transition:transform 0.08s ease;
+  }
+  .btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--coral-deep);}
+  .btn.secondary{ background:var(--card); color:var(--navy); box-shadow:0 4px 0 rgba(27,58,75,0.15); }
+  .btn.mint{background:var(--mint);box-shadow:0 4px 0 var(--mint-deep);}
+  .btn-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+  .btn:disabled{opacity:0.45;cursor:default;}
+  .quiz-prompt{
+    display:flex;align-items:center;gap:10px; background:var(--lilac); color:#fff;
+    border-radius:16px; padding:12px 20px; font-weight:700; cursor:pointer;
+  }
+  .quiz-prompt:active{transform:scale(0.97);}
+  .feedback-banner{ font-family:'Baloo 2',sans-serif; font-weight:700; font-size:16px; min-height:22px; }
+  .feedback-banner.good{color:var(--mint-deep);}
+  .feedback-banner.gentle{color:var(--coral-deep);}
+  .summary-stat{ font-family:'Baloo 2',sans-serif; font-size:46px;font-weight:800;color:var(--mint-deep); }
+  footer{ padding:10px 22px 16px; display:flex;justify-content:center; flex-shrink:0; }
+  .banner-note{ font-size:11px; color:rgba(27,58,75,0.45); max-width:520px; }
+  .voice-panel{
+    position:absolute;top:70px;right:20px; background:var(--card); border-radius:16px;
+    box-shadow:0 10px 30px rgba(27,58,75,0.2); padding:14px; width:230px; z-index:20;
+  }
+  .voice-panel label{font-size:12px;font-weight:800;display:block;margin-bottom:6px;}
+  .voice-panel select{ width:100%;padding:8px;border-radius:10px;border:1px solid rgba(27,58,75,0.15); font-family:'Nunito';font-weight:700;font-size:13px; }
+  .voice-panel .close-voice{ margin-top:10px;width:100%; background:var(--sky);border:none;border-radius:10px;padding:6px; font-weight:700;font-size:12px;cursor:pointer; }
+
+  /* LEVEL MAP */
+  .map-scroll{ width:100%; max-width:760px; overflow-x:auto; padding-bottom:6px; }
+  .map-track{ display:flex; gap:10px; padding:6px 4px; }
+  .map-node{
+    flex-shrink:0; width:64px; display:flex; flex-direction:column; align-items:center; gap:6px;
+    cursor:pointer; border:none; background:none; font-family:'Nunito';
+  }
+  .map-node .circle{
+    width:52px;height:52px;border-radius:50%; display:flex;align-items:center;justify-content:center;
+    font-family:'Baloo 2',sans-serif; font-weight:800; font-size:22px;
+    background:var(--sky); color:rgba(27,58,75,0.35); border:3px solid transparent;
+  }
+  .map-node.mastered .circle{ background:var(--mint); color:#fff; border-color:var(--mint-deep); }
+  .map-node.current .circle{ background:var(--coral); color:#fff; border-color:var(--coral-deep); transform:scale(1.1); }
+  .map-node.unlocked .circle{ background:var(--sun); color:var(--navy); border-color:var(--sun-deep); }
+  .map-node.locked .circle{ opacity:0.5; }
+  .map-node .node-label{ font-size:10px; font-weight:800; color:rgba(27,58,75,0.55); }
+  .map-node.locked{ cursor:default; }
+  .map-legend{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; font-size:11px; font-weight:700; color:rgba(27,58,75,0.55); }
+  .legend-dot{ display:inline-block; width:9px;height:9px;border-radius:50%; margin-right:4px; vertical-align:middle; }
+
+  /* PHONE / PORTRAIT */
+  @media (max-width:640px){
+    header{ padding:12px 16px; }
+    .header-title{ font-size:15px; }
+    .header-sub{ font-size:10px; }
+    .letter-badge{ width:44px;height:44px;font-size:22px;border-radius:13px; }
+    .icon-btn{ padding:8px 10px;font-size:0; }
+    .icon-btn::before{ font-size:18px; }
+    #voiceToggle::before{ content:"🔊"; }
+    #mapToggle::before{ content:"🗺️"; }
+    #soundToggle::before{ content:"🎵"; }
+    main{ padding:18px 16px 8px; gap:14px; justify-content:flex-start; padding-top:24px; }
+    .hero-letter{ font-size:clamp(64px,26vw,100px); }
+    .hero-word-card{ padding:14px 20px; }
+    .hero-word-emoji{ font-size:36px; }
+    img.hero-word-emoji{ width:36px; height:36px; }
+    .hero-word-label{ font-size:19px; }
+    .screen-title{ font-size:clamp(19px,5.5vw,24px); }
+    .lede{ font-size:14px; }
+    .card-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); max-width:420px; gap:14px; }
+    .picture-card{ padding:20px 8px 14px; border-radius:22px; }
+    .picture-card .emoji{ font-size:48px; }
+    .picture-card img.emoji{ width:64px; height:64px; }
+    .picture-card .label{ font-size:14px; }
+    .btn-row{ flex-direction:column; width:100%; max-width:340px; }
+    .btn{ width:100%; padding:16px 20px; font-size:17px; }
+    .quiz-prompt{ font-size:14px; text-align:left; }
+    .summary-stat{ font-size:38px; }
+    .voice-panel{ top:auto; bottom:0; left:0; right:0; width:100%; border-radius:20px 20px 0 0; padding:20px; }
+  }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+
+  <header>
+    <div class="header-left">
+      <div class="letter-badge" id="letterBadge">s</div>
+      <div style="min-width:0;">
+        <div class="header-title">Letters &amp; Sounds</div>
+        <div class="header-sub" id="headerSub">Book 1 · Foundation</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="progress-dots" id="progressDots"></div>
+      <button class="icon-btn" id="mapToggle">🗺️ Map</button>
+      <button class="icon-btn" id="soundToggle">🎵 Sound</button>
+      <button class="icon-btn" id="voiceToggle">🔊 Voice</button>
+    </div>
+  </header>
+
+  <main id="screen"></main>
+
+  <footer>
+    <div class="banner-note" id="footNote"></div>
+  </footer>
+
+  <div class="voice-panel" id="voicePanel" style="display:none;">
+    <label for="voiceSelect">Reading voice</label>
+    <select id="voiceSelect"></select>
+    <button class="close-voice" id="closeVoice">Done</button>
+  </div>
+
+</div>
+
+<script>
+/* =========================================================
+   LETTERS & SOUNDS — BOOK 1 (COMPLETE)
+   Practice Engine v1 (master_reference.md Part 4)
+   Validated word pools (master_reference.md Part 5)
+   Phonics teaching order per Part 3: s,a,t,p,i,n,m,d,g,o,c,k,
+   e,u,r,h,b,f,l,j,v,w,x,y,z,q
+   ========================================================= */
+
+const PHONICS_ORDER = ['s','a','t','p','i','n','m','d','g','o','c','k','e','u','r','h','b','f','l','j','v','w','x','y','z','q'];
+
+// ---- Per-letter teaching metadata: name (accent-aware), phonetic display,
+// and the TTS approximation used for the "how it sounds" tap. ----
+// NOTE ON TTS LIMITS (flagged, not hidden): TTS can only approximate
+// continuant sounds (s,f,m,n,l,r,v,z,h) by stretching them. Stop sounds
+// (t,p,b,d,g,k,c) physically cannot be isolated by a speech engine — it
+// will always attach a schwa ("tuh","puh"), which is a known, real gap.
+// Vowel phonemes are the least reliable of all via TTS. This whole column
+// is a placeholder until real recorded audio is sourced (see chat notes).
+const LETTER_META = {
+  s: { name:{gb:'ess',us:'ess'}, phonetic:'/s/', tapSound:'ssss', tapRate:0.6 },
+  a: { name:{gb:'ay', us:'ay' }, phonetic:'/a/', tapSound:'a',    tapRate:0.5 },
+  t: { name:{gb:'tee',us:'tee'}, phonetic:'/t/', tapSound:'t',    tapRate:0.5 },
+  p: { name:{gb:'pee',us:'pee'}, phonetic:'/p/', tapSound:'p',    tapRate:0.5 },
+  i: { name:{gb:'eye',us:'eye'}, phonetic:'/i/', tapSound:'i',    tapRate:0.5 },
+  n: { name:{gb:'en', us:'en' }, phonetic:'/n/', tapSound:'nnnn', tapRate:0.6 },
+  m: { name:{gb:'em', us:'em' }, phonetic:'/m/', tapSound:'mmmm', tapRate:0.6 },
+  d: { name:{gb:'dee',us:'dee'}, phonetic:'/d/', tapSound:'d',    tapRate:0.5 },
+  g: { name:{gb:'jee',us:'jee'}, phonetic:'/g/', tapSound:'g',    tapRate:0.5 },
+  o: { name:{gb:'oh', us:'oh' }, phonetic:'/o/', tapSound:'o',    tapRate:0.5 },
+  c: { name:{gb:'see',us:'see'}, phonetic:'/k/', tapSound:'k',    tapRate:0.5 },
+  k: { name:{gb:'kay',us:'kay'}, phonetic:'/k/', tapSound:'k',    tapRate:0.5 },
+  e: { name:{gb:'ee', us:'ee' }, phonetic:'/e/', tapSound:'e',    tapRate:0.5 },
+  u: { name:{gb:'you',us:'you'}, phonetic:'/u/', tapSound:'u',    tapRate:0.5 },
+  r: { name:{gb:'ar', us:'ar' }, phonetic:'/r/', tapSound:'rrrr', tapRate:0.6 },
+  h: { name:{gb:'aitch',us:'aitch'}, phonetic:'/h/', tapSound:'hhhh', tapRate:0.6 },
+  b: { name:{gb:'bee',us:'bee'}, phonetic:'/b/', tapSound:'b',    tapRate:0.5 },
+  f: { name:{gb:'ef', us:'ef' }, phonetic:'/f/', tapSound:'ffff', tapRate:0.6 },
+  l: { name:{gb:'el', us:'el' }, phonetic:'/l/', tapSound:'llll', tapRate:0.6 },
+  j: { name:{gb:'jay',us:'jay'}, phonetic:'/j/', tapSound:'j',    tapRate:0.5 },
+  v: { name:{gb:'vee',us:'vee'}, phonetic:'/v/', tapSound:'vvvv', tapRate:0.6 },
+  w: { name:{gb:'double-u',us:'double-u'}, phonetic:'/w/', tapSound:'w', tapRate:0.7 },
+  x: { name:{gb:'ex', us:'ex' }, phonetic:'/ks/', tapSound:'ks',  tapRate:0.6 },
+  y: { name:{gb:'why',us:'why'}, phonetic:'/y/', tapSound:'y',    tapRate:0.7 },
+  z: { name:{gb:'zed',us:'zee'}, phonetic:'/z/', tapSound:'zzzz', tapRate:0.6 },
+  q: { name:{gb:'cue',us:'cue'}, phonetic:'/kw/', tapSound:'kw',  tapRate:0.6 }
+};
+
+// ---- Validated word pools, master_reference.md Part 5. Original 6 words
+// (bold in the source table) keep their emoji choices from the working
+// build; the rest come from the source's own EMOJI_ADDITIONS block. Emoji
+// are explicitly placeholder art per master_reference.md §6 — a couple of
+// non-adjacent letters share an emoji where no better pictogram exists;
+// that's a cosmetic gap for the real illustration pass, not a data error. ----
+const LETTER_DATA = {
+  s: { hero:'sun', heroEmoji:'☀️', pool:[
+    {word:'sun',emoji:'☀️'},{word:'star',emoji:'⭐'},{word:'sock',emoji:'🧦'},{word:'snake',emoji:'🐍'},
+    {word:'seal',emoji:'🦭'},{word:'six',emoji:'6️⃣'},{word:'sandwich',emoji:'🥪'},{word:'spider',emoji:'🕷️'},
+    {word:'snail',emoji:'🐌'},{word:'soap',emoji:'🧼'},{word:'sailboat',emoji:'⛵'},{word:'seven',emoji:'7️⃣'}
+  ]},
+  a: { hero:'apple', heroEmoji:'🍎', pool:[
+    {word:'apple',emoji:'🍎'},{word:'ant',emoji:'🐜'},{word:'axe',emoji:'🪓'},{word:'avocado',emoji:'🥑'},
+    {word:'alligator',emoji:'🐊'},{word:'ambulance',emoji:'🚑'},{word:'anchor',emoji:'⚓'},
+    {word:'astronaut',emoji:'🧑\u200d🚀'},{word:'arrow',emoji:'🏹'},{word:'alarm',emoji:'⏰'}
+  ]},
+  t: { hero:'tiger', heroEmoji:'🐯', pool:[
+    {word:'tiger',emoji:'🐯'},{word:'tomato',emoji:'🍅'},{word:'tree',emoji:'🌳'},{word:'train',emoji:'🚂'},
+    {word:'turtle',emoji:'🐢'},{word:'teeth',emoji:'🦷'},{word:'telephone',emoji:'☎️'},{word:'tent',emoji:'⛺'},
+    {word:'torch',emoji:'🔦'},{word:'trumpet',emoji:'🎺'},{word:'toothbrush',emoji:'🪥'},{word:'tap',emoji:'🚰'}
+  ]},
+  p: { hero:'pen', heroEmoji:'🖊️', pool:[
+    {word:'pen',emoji:'🖊️'},{word:'pizza',emoji:'🍕'},{word:'panda',emoji:'🐼'},{word:'pear',emoji:'🍐'},
+    {word:'plane',emoji:'✈️'},{word:'pumpkin',emoji:'🎃'},{word:'parrot',emoji:'🦜'},{word:'penguin',emoji:'🐧'},
+    {word:'piano',emoji:'🎹'},{word:'pineapple',emoji:'🍍'},{word:'purse',emoji:'👛'},{word:'pencil',emoji:'✏️'}
+  ]},
+  i: { hero:'insect', heroEmoji:'🐛', pool:[
+    {word:'insect',emoji:'🐛'},{word:'iguana',emoji:'🦎'},{word:'igloo',emoji:'🧊'},{word:'ink',emoji:'🖋️'},
+    {word:'ill',emoji:'🤒'}
+  ]},
+  n: { hero:'nest', heroEmoji:'🪺', pool:[
+    {word:'nest',emoji:'🪺'},{word:'net',emoji:'🥅'},{word:'nose',emoji:'👃'},{word:'nut',emoji:'🌰'},
+    {word:'nine',emoji:'9️⃣'},{word:'needle',emoji:'🪡'},{word:'necklace',emoji:'📿'},{word:'newspaper',emoji:'📰'},
+    {word:'notebook',emoji:'📓'},{word:'napkin',emoji:'🧻'},{word:'nurse',emoji:'🧑\u200d⚕️'},{word:'noodles',emoji:'🍜'}
+  ]},
+  m: { hero:'moon', heroEmoji:'🌙', pool:[
+    {word:'moon',emoji:'🌙'},{word:'mouse',emoji:'🐭'},{word:'milk',emoji:'🥛'},{word:'mango',emoji:'🥭'},
+    {word:'map',emoji:'🗺️'},{word:'mushroom',emoji:'🍄'},{word:'mask',emoji:'😷'},{word:'mirror',emoji:'🪞'},
+    {word:'motorcycle',emoji:'🏍️'},{word:'muffin',emoji:'🧁'},{word:'microphone',emoji:'🎤'},{word:'mermaid',emoji:'🧜\u200d♀️'}
+  ]},
+  d: { hero:'dog', heroEmoji:'🐶', pool:[
+    {word:'dog',emoji:'🐶'},{word:'duck',emoji:'🦆'},{word:'door',emoji:'🚪'},{word:'doll',emoji:'🪆'},
+    {word:'drum',emoji:'🥁'},{word:'donut',emoji:'🍩'},{word:'dinosaur',emoji:'🦖'},{word:'diamond',emoji:'💎'},
+    {word:'dolphin',emoji:'🐬'},{word:'dragon',emoji:'🐉'},{word:'dice',emoji:'🎲'},{word:'doctor',emoji:'🧑\u200d⚕️'}
+  ]},
+  g: { hero:'goat', heroEmoji:'🐐', pool:[
+    {word:'goat',emoji:'🐐'},{word:'grapes',emoji:'🍇'},{word:'gift',emoji:'🎁'},{word:'guitar',emoji:'🎸'},
+    {word:'ghost',emoji:'👻'},{word:'girl',emoji:'👧'},{word:'glasses',emoji:'👓'},{word:'glove',emoji:'🧤'},
+    {word:'globe',emoji:'🌍'},{word:'grass',emoji:'🌱'},{word:'goose',emoji:'🪿'},{word:'gorilla',emoji:'🦍'}
+  ]},
+  o: { hero:'orange', heroEmoji:'🍊', pool:[
+    {word:'orange',emoji:'🍊'},{word:'octopus',emoji:'🐙'},{word:'ox',emoji:'🐂'},{word:'olive',emoji:'🫒'},
+    {word:'otter',emoji:'🦦'},{word:'omelette',emoji:'🍳'}
+  ]},
+  c: { hero:'cat', heroEmoji:'🐱', pool:[
+    {word:'cat',emoji:'🐱'},{word:'cup',emoji:'🥤'},{word:'car',emoji:'🚗'},{word:'cake',emoji:'🎂'},
+    {word:'carrot',emoji:'🥕'},{word:'cow',emoji:'🐄'},{word:'camera',emoji:'📷'},{word:'candle',emoji:'🕯️'},
+    {word:'castle',emoji:'🏰'},{word:'clock',emoji:'🕐'},{word:'cloud',emoji:'☁️'},{word:'crab',emoji:'🦀'}
+  ]},
+  k: { hero:'key', heroEmoji:'🔑', pool:[
+    {word:'key',emoji:'🔑'},{word:'kite',emoji:'🪁'},{word:'king',emoji:'🤴'},{word:'koala',emoji:'🐨'},
+    {word:'kangaroo',emoji:'🦘'},{word:'kiwi',emoji:'🥝'},{word:'kettle',emoji:'🫖'},{word:'kayak',emoji:'🛶'},
+    {word:'kitten',emoji:'🐈'},{word:'keyboard',emoji:'⌨️'},{word:'kebab',emoji:'🍢'}
+  ]},
+  e: { hero:'egg', heroEmoji:'🥚', pool:[
+    {word:'egg',emoji:'🥚'},{word:'elephant',emoji:'🐘'},{word:'envelope',emoji:'✉️'},{word:'elf',emoji:'🧝'},
+    {word:'engine',emoji:'🚂'},{word:'elk',emoji:'🦌'},{word:'escalator',emoji:'🛗'}
+  ]},
+  u: { hero:'umbrella', heroEmoji:'☂️', pool:[
+    {word:'umbrella',emoji:'☂️'},{word:'up',emoji:'⬆️'},{word:'underwear',emoji:'🩲'},{word:'uncle',emoji:'🧑'}
+  ]},
+  r: { hero:'ring', heroEmoji:'💍', pool:[
+    {word:'ring',emoji:'💍'},{word:'rainbow',emoji:'🌈'},{word:'rabbit',emoji:'🐰'},{word:'rocket',emoji:'🚀'},
+    {word:'rose',emoji:'🌹'},{word:'robot',emoji:'🤖'},{word:'raccoon',emoji:'🦝'},{word:'radio',emoji:'📻'},
+    {word:'rain',emoji:'🌧️'},{word:'ruler',emoji:'📏'},{word:'restaurant',emoji:'🍽️'},{word:'roof',emoji:'🏠'}
+  ]},
+  h: { hero:'hat', heroEmoji:'🎩', pool:[
+    {word:'hat',emoji:'🎩'},{word:'hen',emoji:'🐔'},{word:'house',emoji:'🏡'},{word:'horse',emoji:'🐴'},
+    {word:'hand',emoji:'✋'},{word:'heart',emoji:'❤️'},{word:'helicopter',emoji:'🚁'},{word:'hammer',emoji:'🔨'},
+    {word:'honey',emoji:'🍯'},{word:'hedgehog',emoji:'🦔'},{word:'hippo',emoji:'🦛'},{word:'hotdog',emoji:'🌭'}
+  ]},
+  b: { hero:'ball', heroEmoji:'⚽', pool:[
+    {word:'ball',emoji:'⚽'},{word:'banana',emoji:'🍌'},{word:'bear',emoji:'🐻'},{word:'bird',emoji:'🐦'},
+    {word:'bus',emoji:'🚌'},{word:'book',emoji:'📖'},{word:'boat',emoji:'⛵'},{word:'bee',emoji:'🐝'},
+    {word:'bell',emoji:'🔔'},{word:'bicycle',emoji:'🚲'},{word:'butterfly',emoji:'🦋'},{word:'balloon',emoji:'🎈'}
+  ]},
+  f: { hero:'fish', heroEmoji:'🐟', pool:[
+    {word:'fish',emoji:'🐟'},{word:'frog',emoji:'🐸'},{word:'fire',emoji:'🔥'},{word:'flower',emoji:'🌸'},
+    {word:'fox',emoji:'🦊'},{word:'foot',emoji:'🦶'},{word:'feather',emoji:'🪶'},{word:'fan',emoji:'🪭'},
+    {word:'flag',emoji:'🚩'},{word:'fork',emoji:'🍴'},{word:'fountain',emoji:'⛲'},{word:'family',emoji:'👨\u200d👩\u200d👧'}
+  ]},
+  l: { hero:'leaf', heroEmoji:'🍃', pool:[
+    {word:'leaf',emoji:'🍃'},{word:'lion',emoji:'🦁'},{word:'lemon',emoji:'🍋'},{word:'lamp',emoji:'💡'},
+    {word:'ladybug',emoji:'🐞'},{word:'lock',emoji:'🔒'},{word:'ladder',emoji:'🪜'},{word:'lettuce',emoji:'🥬'},
+    {word:'lizard',emoji:'🦎'},{word:'lips',emoji:'👄'},{word:'log',emoji:'🪵'},{word:'lollipop',emoji:'🍭'}
+  ]},
+  j: { hero:'jug', heroEmoji:'🫗', pool:[
+    {word:'jug',emoji:'🫗'},{word:'juice',emoji:'🧃'},{word:'jacket',emoji:'🧥'},{word:'jellyfish',emoji:'🪼'},
+    {word:'jeans',emoji:'👖'},{word:'jet',emoji:'✈️'},{word:'jewel',emoji:'💎'},{word:'joystick',emoji:'🕹️'},
+    {word:'jigsaw',emoji:'🧩'},{word:'journal',emoji:'📔'},{word:'jar',emoji:'🫙'},{word:'jump rope',emoji:'🪢'}
+  ]},
+  v: { hero:'van', heroEmoji:'🚐', pool:[
+    {word:'van',emoji:'🚐'},{word:'violin',emoji:'🎻'},{word:'volcano',emoji:'🌋'},{word:'vase',emoji:'🏺'},
+    {word:'vegetable',emoji:'🥦'},{word:'vest',emoji:'🦺'},{word:'vacuum',emoji:'🧹'},{word:'village',emoji:'🏘️'},
+    {word:'volleyball',emoji:'🏐'},{word:'vet',emoji:'🧑\u200d⚕️'}
+  ]},
+  w: { hero:'window', heroEmoji:'🪟', pool:[
+    {word:'window',emoji:'🪟'},{word:'watch',emoji:'⌚'},{word:'water',emoji:'💧'},{word:'whale',emoji:'🐳'},
+    {word:'watermelon',emoji:'🍉'},{word:'wheel',emoji:'🛞'},{word:'wagon',emoji:'🛒'},{word:'wave',emoji:'🌊'},
+    {word:'web',emoji:'🕸️'},{word:'wolf',emoji:'🐺'},{word:'worm',emoji:'🪱'},{word:'wizard',emoji:'🧙'}
+  ]},
+  x: { hero:'box', heroEmoji:'📦', pool:[
+    {word:'box',emoji:'📦'},{word:'fox',emoji:'🦊'},{word:'six',emoji:'6️⃣'},{word:'taxi',emoji:'🚕'},
+    {word:'ox',emoji:'🐂'},{word:'x-ray',emoji:'🩻'}
+  ]},
+  y: { hero:'yo-yo', heroEmoji:'🪀', pool:[
+    {word:'yo-yo',emoji:'🪀'},{word:'yarn',emoji:'🧶'},{word:'yak',emoji:'🐃'},{word:'yam',emoji:'🍠'},
+    {word:'yellow',emoji:'🟡'},{word:'yell',emoji:'📣'},{word:'yacht',emoji:'🛥️'},{word:'yard',emoji:'🏞️'}
+  ]},
+  z: { hero:'zebra', heroEmoji:'🦓', pool:[
+    {word:'zebra',emoji:'🦓'},{word:'zero',emoji:'0️⃣'},{word:'zombie',emoji:'🧟'},{word:'zip',emoji:'🤐'},
+    {word:'zigzag',emoji:'〰️'},{word:'zoo',emoji:'🦁'},{word:'zucchini',emoji:'🥒'}
+  ]},
+  q: { hero:'queen', heroEmoji:'👸', pool:[
+    {word:'queen',emoji:'👸'},{word:'question',emoji:'❓'},{word:'quiet',emoji:'🤫'},{word:'quilt',emoji:'🛏️'},
+    {word:'quack',emoji:'🦆'},{word:'quiz',emoji:'📝'},{word:'quarter',emoji:'🪙'},{word:'quill',emoji:'🪶'}
+  ]}
+};
+// Attach a script + per-word state to every letter (kept out of the literal
+// above purely to avoid repeating the same template 26 times).
+PHONICS_ORDER.forEach(key => {
+  const d = LETTER_DATA[key];
+  d.key = key;
+  d.script = `This is ${key}. It says ${LETTER_META[key].phonetic}. ${d.hero} starts with ${key}.`;
+  d.pool = d.pool.map(w => ({ ...w, timesShown: 0, lastShownDate: null }));
+});
+
+// ---- Progress state, one entry per letter (spec's data-model sketch,
+// extended across the whole alphabet). Only the first letter starts open. ----
+let letterProgress = {};
+PHONICS_ORDER.forEach((key, idx) => {
+  letterProgress[key] = {
+    introDone: false,
+    practiceRoundsCompleted: 0,
+    accuracyLog: [],
+    unlocked: idx === 0,
+    completionType: null   // null | 'mastered' | 'skipped'
+  };
+});
+
+let activeKey = PHONICS_ORDER[0];
+let sessionRoundCount = 0;   // every round, any letter, any type — drives the "every 4th" review rule
+let sessionEndedEarly = false;
+let lastRoundWordSet = [];
+let currentQuiz = null;
+
+const screen = document.getElementById('screen');
+const footNote = document.getElementById('footNote');
+const progressDots = document.getElementById('progressDots');
+const letterBadge = document.getElementById('letterBadge');
+const headerSub = document.getElementById('headerSub');
+
+// ---------------- Text-to-speech ----------------
+let voices = [];
+let chosenVoice = null;
+let voicesReady = false;
+
+function loadVoices(){
+  voices = speechSynthesis.getVoices();
+  if (!voices.length) return;
+  voicesReady = true;
+  const select = document.getElementById('voiceSelect');
+  select.innerHTML = '';
+  const englishVoices = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+  const list = englishVoices.length ? englishVoices : voices;
+  list.sort((a,b) => {
+    const aGoogle = a.name.toLowerCase().includes('google') ? 0 : 1;
+    const bGoogle = b.name.toLowerCase().includes('google') ? 0 : 1;
+    if (aGoogle !== bGoogle) return aGoogle - bGoogle;
+    const aGB = a.lang.toLowerCase() === 'en-gb' ? 0 : 1;
+    const bGB = b.lang.toLowerCase() === 'en-gb' ? 0 : 1;
+    return aGB - bGB;
+  });
+  list.forEach(v => {
+    const opt = document.createElement('option');
+    opt.value = v.name;
+    opt.textContent = `${v.name} (${v.lang})`;
+    select.appendChild(opt);
+  });
+  if (list.length){
+    chosenVoice = list.find(v => v.name.toLowerCase().includes('google')) || list[0];
+    select.value = chosenVoice.name;
+  }
+}
+speechSynthesis.onvoiceschanged = loadVoices;
+loadVoices();
+let voicePollAttempts = 0;
+const voicePoll = setInterval(() => {
+  voicePollAttempts++;
+  if (voicesReady || voicePollAttempts > 20){ clearInterval(voicePoll); return; }
+  loadVoices();
+}, 150);
+
+document.getElementById('voiceSelect').addEventListener('change', (e) => {
+  chosenVoice = voices.find(v => v.name === e.target.value) || null;
+});
+document.getElementById('voiceToggle').addEventListener('click', () => {
+  document.getElementById('voicePanel').style.display = 'block';
+});
+document.getElementById('closeVoice').addEventListener('click', () => {
+  document.getElementById('voicePanel').style.display = 'none';
+});
+
+function speak(text, rate = 0.92){
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  if (chosenVoice) utter.voice = chosenVoice;
+  utter.rate = rate;
+  utter.pitch = 1.0;
+  speechSynthesis.speak(utter);
+}
+
+function currentAccent(){
+  if (chosenVoice && chosenVoice.lang && chosenVoice.lang.toLowerCase().includes('us')) return 'us';
+  return 'gb';
+}
+
+// ---------------- Sound design: synthesized SFX (no background music) ----------------
+// Generated live via the Web Audio API — no audio files, works offline in
+// the PWA. Feature-detected and wrapped defensively throughout: on any
+// environment without Web Audio support this silently no-ops rather than
+// breaking the app. Background music was tried and pulled — a synthesized
+// oscillator drone didn't sound good in practice, so this stays limited to
+// short, proven SFX (tap click, correct-answer chime) rather than anything
+// sustained.
+let soundOn = true;
+let audioCtx = null;
+
+function getAudioCtx(){
+  if (audioCtx) return audioCtx;
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return null;
+  try { audioCtx = new Ctx(); } catch (e) { return null; }
+  return audioCtx;
+}
+
+function playClick(){
+  if (!soundOn) return;
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+  try {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = 720;
+    gain.gain.setValueAtTime(0.05, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.06);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.06);
+  } catch (e) { /* silent no-op */ }
+}
+
+function playChime(){
+  if (!soundOn) return;
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+  try {
+    const notes = [523.25, 659.25, 783.99]; // C5, E5, G5 — simple, cheerful, not a full jingle
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      const start = ctx.currentTime + i * 0.09;
+      gain.gain.setValueAtTime(0.001, start);
+      gain.gain.linearRampToValueAtTime(0.06, start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.35);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(start);
+      osc.stop(start + 0.35);
+    });
+  } catch (e) { /* silent no-op */ }
+}
+
+function initSoundOnFirstGesture(){
+  getAudioCtx();
+  document.removeEventListener('click', initSoundOnFirstGesture);
+}
+document.addEventListener('click', initSoundOnFirstGesture);
+// Light-touch tap feedback on every button/card tap, app-wide.
+document.addEventListener('click', (e) => {
+  if (e.target.closest('.btn, .picture-card, .name-pill, .map-node, .icon-btn, .hero-letter, .hero-word-card, .quiz-prompt')){
+    playClick();
+  }
+});
+document.getElementById('soundToggle').addEventListener('click', () => {
+  soundOn = !soundOn;
+  document.getElementById('soundToggle').textContent = soundOn ? '🎵 Sound' : '🔇 Sound';
+});
+
+// ---------------- Illustration: real image first, emoji fallback ----------------
+// Filenames are word-based (not letter-based) because a handful of words are
+// shared across two letters' pools (e.g. "six" appears in both s and x) —
+// one commissioned image covers both. Drop a matching file into images/words/
+// and it's used automatically; nothing needs to change in this file.
+function slugify(word){
+  return word.toLowerCase().trim().replace(/\s+/g, '-');
+}
+function pictureHTML(word, emoji, sizeClass){
+  const src = `images/words/${slugify(word)}.png`;
+  // onerror swaps to the emoji span and only fires once per element, so a
+  // missing file costs one failed request, not a broken image icon.
+  return `<img src="${src}" alt="${word}" class="${sizeClass}"
+            onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'${sizeClass}',textContent:'${emoji}'}))">`;
+}
+
+// ---------------- Helpers ----------------
+function shuffle(arr){
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function sameSet(a, b){
+  if (a.length !== b.length) return false;
+  return [...a].sort().join(',') === [...b].sort().join(',');
+}
+function markShown(words){
+  const now = new Date().toISOString().slice(0,10);
+  words.forEach(w => { w.timesShown++; w.lastShownDate = now; });
+}
+
+// Practice/Review composition: 4 target-letter words + 2 distractor words
+// from the immediately previous (most recently mastered) letter — per
+// spec §2. The very first letter in the sequence has no previous letter,
+// so it's 6 target words instead, exactly as the spec's worked example
+// describes for Foundation's first letter.
+function buildRoundWords(letterKey){
+  const idx = PHONICS_ORDER.indexOf(letterKey);
+  const prevKey = idx > 0 ? PHONICS_ORDER[idx - 1] : null;
+  const ownPool = LETTER_DATA[letterKey].pool;
+  const distractorCount = prevKey ? Math.min(2, LETTER_DATA[prevKey].pool.length) : 0;
+  const targetCount = Math.min(6 - distractorCount, ownPool.length);
+
+  let targets = shuffle(ownPool).slice(0, targetCount);
+  let tries = 0;
+  while (sameSet(targets.map(w=>w.word), lastRoundWordSet) && tries < 5){
+    targets = shuffle(ownPool).slice(0, targetCount);
+    tries++;
+  }
+  const distractors = prevKey
+    ? shuffle(LETTER_DATA[prevKey].pool).slice(0, distractorCount).map(w => ({ ...w, fromLetter: prevKey }))
+    : [];
+
+  markShown(targets);
+  markShown(distractors);
+  lastRoundWordSet = targets.map(w => w.word);
+  return { display: shuffle([...targets, ...distractors]), targets };
+}
+
+// Review round: pull from every letter already introduced (introDone),
+// weighted toward oldest lastShownDate — spec §2's interleaving rule.
+function buildReviewWords(){
+  const seen = [];
+  PHONICS_ORDER.forEach(key => {
+    if (letterProgress[key].introDone){
+      LETTER_DATA[key].pool.forEach(w => seen.push({ ...w, fromLetter: key }));
+    }
+  });
+  const ranked = seen.sort((a, b) => {
+    if (!a.lastShownDate) return -1;
+    if (!b.lastShownDate) return 1;
+    return a.lastShownDate.localeCompare(b.lastShownDate);
+  });
+  const picked = ranked.slice(0, Math.min(6, ranked.length));
+  markShown(picked);
+  return { display: shuffle(picked), targets: shuffle(picked).slice(0, Math.min(4, picked.length)) };
+}
+
+function renderDots(){
+  progressDots.innerHTML = '';
+  const p = letterProgress[activeKey];
+  for (let i = 0; i < 5; i++){
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i < p.practiceRoundsCompleted ? ' filled' : '');
+    progressDots.appendChild(dot);
+  }
+}
+function setFootNote(text){ footNote.textContent = text || ''; }
+function refreshHeader(){
+  letterBadge.textContent = activeKey;
+  const idx = PHONICS_ORDER.indexOf(activeKey);
+  headerSub.textContent = `Book 1 · Letter ${idx + 1} of ${PHONICS_ORDER.length}`;
+}
+letterBadge.addEventListener('click', renderLevelMap);
+document.getElementById('mapToggle').addEventListener('click', renderLevelMap);
+
+// ---------------- Round router ----------------
+function nextRound(){
+  sessionRoundCount++;
+  refreshHeader();
+  renderDots();
+  const p = letterProgress[activeKey];
+  if (!p.introDone){ renderIntro(); return; }
+  if (sessionRoundCount % 4 === 0){ renderReviewRound(); return; }
+  renderPracticeRound();
+}
+
+// ---------------- INTRO screen ----------------
+function renderIntro(){
+  const L = LETTER_DATA[activeKey];
+  const meta = LETTER_META[activeKey];
+  setFootNote('Intro round · always round 1 for a new letter · not scored');
+  screen.innerHTML = `
+    <div class="eyebrow">Meet the letter</div>
+    <div class="hero-letter" id="heroLetter">${activeKey}</div>
+    <button class="name-pill" id="phoneticToggle">${meta.phonetic}</button>
+    <div class="hero-word-card" id="heroWordCard">
+      ${pictureHTML(L.hero, L.heroEmoji, 'hero-word-emoji')}
+      <div class="hero-word-label">${L.hero}</div>
+    </div>
+    <div class="tap-hint">Tap the big letter to hear its name, the small text for how it sounds</div>
+    <div class="btn-row">
+      <button class="btn" id="introContinue">I'm ready! →</button>
+    </div>
+  `;
+  document.getElementById('heroLetter').addEventListener('click', () => {
+    speak(meta.name[currentAccent()]);
+  });
+  document.getElementById('phoneticToggle').addEventListener('click', () => {
+    speak(meta.tapSound, meta.tapRate);
+  });
+  document.getElementById('heroWordCard').addEventListener('click', () => speak(L.script));
+  document.getElementById('introContinue').addEventListener('click', () => {
+    letterProgress[activeKey].introDone = true;
+    nextRound();
+  });
+}
+
+// ---------------- PRACTICE round ----------------
+function renderPracticeRound(){
+  const { display, targets } = buildRoundWords(activeKey);
+  setFootNote(`Practice round ${letterProgress[activeKey].practiceRoundsCompleted + 1} · scored`);
+  screen.innerHTML = `
+    <div class="eyebrow">Practice</div>
+    <h1 class="screen-title">Tap each picture to hear it</h1>
+    <div class="card-grid" id="grid"></div>
+    <div class="btn-row">
+      <button class="btn" id="startQuiz">I know these! Start the game →</button>
+    </div>
+  `;
+  renderStaticGrid(display);
+  document.getElementById('startQuiz').addEventListener('click', () => {
+    runQuiz(display, targets, 'practice');
+  });
+}
+
+// ---------------- REVIEW round ----------------
+function renderReviewRound(){
+  const { display, targets } = buildReviewWords();
+  setFootNote('Review round · every 4th round overall · interleaved, not scored toward the gate');
+  screen.innerHTML = `
+    <div class="eyebrow">Review</div>
+    <h1 class="screen-title">Let's remember these together</h1>
+    <p class="lede">A quick mix of things you've already met.</p>
+    <div class="card-grid" id="grid"></div>
+    <div class="btn-row">
+      <button class="btn mint" id="startQuiz">Let's play →</button>
+    </div>
+  `;
+  renderStaticGrid(display);
+  document.getElementById('startQuiz').addEventListener('click', () => {
+    runQuiz(display, targets, 'review');
+  });
+}
+
+function renderStaticGrid(words){
+  const grid = document.getElementById('grid');
+  words.forEach(w => {
+    const card = document.createElement('div');
+    card.className = 'picture-card';
+    card.innerHTML = `${pictureHTML(w.word, w.emoji, 'emoji')}<div class="label">${w.word}</div>`;
+    card.addEventListener('click', () => speak(w.word));
+    grid.appendChild(card);
+  });
+}
+
+// ---------------- Quiz runner ----------------
+function runQuiz(displayWords, targets, kind){
+  currentQuiz = { displayWords, targets, index: 0, correct: 0, kind };
+  showQuizQuestion();
+}
+
+function showQuizQuestion(){
+  const q = currentQuiz;
+  if (q.index >= q.targets.length){ finishQuiz(); return; }
+  const target = q.targets[q.index];
+  setFootNote(`${q.kind === 'practice' ? 'Practice' : 'Review'} · question ${q.index + 1} of ${q.targets.length}`);
+  screen.innerHTML = `
+    <div class="eyebrow">${q.kind === 'practice' ? 'Practice game' : 'Review game'}</div>
+    <div class="quiz-prompt" id="replayPrompt">🔊 Find: <strong>${target.word}</strong> — tap to hear again</div>
+    <div class="card-grid" id="grid"></div>
+    <div class="feedback-banner" id="feedback"></div>
+  `;
+  document.getElementById('replayPrompt').addEventListener('click', () => speak(target.word));
+  q.firstAttemptMade = false;
+  const grid = document.getElementById('grid');
+  shuffle(q.displayWords).forEach(w => {
+    const card = document.createElement('div');
+    card.className = 'picture-card';
+    card.dataset.word = w.word;
+    card.innerHTML = `${pictureHTML(w.word, w.emoji, 'emoji')}<div class="label">${w.word}</div>`;
+    card.addEventListener('click', () => handleQuizTap(card, w, target));
+    grid.appendChild(card);
+  });
+  speak(target.word);
+}
+
+function handleQuizTap(cardEl, tapped, target){
+  const grid = document.getElementById('grid');
+  const feedback = document.getElementById('feedback');
+  const q = currentQuiz;
+  const isFirstAttempt = !q.firstAttemptMade;
+
+  if (tapped.word === target.word){
+    cardEl.classList.add('correct');
+    if (isFirstAttempt){
+      feedback.textContent = 'Lovely! That\'s right.';
+      feedback.className = 'feedback-banner good';
+      playChime();
+      speak('Yes! ' + target.word + '.');
+      q.correct++;
+    } else {
+      feedback.textContent = 'There it is! Onward.';
+      feedback.className = 'feedback-banner good';
+      speak('There it is! ' + target.word + '.');
+    }
+    q.firstAttemptMade = true;
+    [...grid.children].forEach(c => c.classList.add('disabled'));
+    setTimeout(() => { q.index++; showQuizQuestion(); }, 1100);
+  } else {
+    q.firstAttemptMade = true;
+    cardEl.classList.add('wrong');
+    feedback.textContent = 'Have another listen and try again.';
+    feedback.className = 'feedback-banner gentle';
+    speak(target.word);
+    setTimeout(() => cardEl.classList.remove('wrong'), 700);
+  }
+}
+
+function finishQuiz(){
+  const q = currentQuiz;
+  const accuracy = q.targets.length ? q.correct / q.targets.length : 1;
+  if (q.kind === 'practice'){
+    letterProgress[activeKey].practiceRoundsCompleted++;
+    letterProgress[activeKey].accuracyLog.push(accuracy);
+    renderRoundSummary(accuracy, q, checkMasteryGate());
+  } else {
+    renderRoundSummary(accuracy, q, null);
+  }
+}
+
+// ---------------- Mastery gate (Part 4 §4) ----------------
+function checkMasteryGate(){
+  const p = letterProgress[activeKey];
+  if (p.practiceRoundsCompleted < 3) return null;
+  const last2 = p.accuracyLog.slice(-2);
+  const avg = last2.reduce((a,b) => a+b, 0) / last2.length;
+  if (avg >= 0.70) return { unlocked: true, avg };
+  if (p.practiceRoundsCompleted >= 5) return { unlocked: true, avg, forced: true };
+  return { unlocked: false, avg };
+}
+
+// ---------------- Round summary ----------------
+function renderRoundSummary(accuracy, q, gateResult){
+  const pct = Math.round(accuracy * 100);
+  const p = letterProgress[activeKey];
+  setFootNote('');
+
+  if (gateResult && gateResult.unlocked){
+    unlockNextLetter('mastered');
+    renderUnlockCelebration(gateResult);
+    return;
+  }
+
+  let gateNote = '';
+  if (q.kind === 'practice' && gateResult){
+    gateNote = `<p class="lede">Not quite at 70% across the last two rounds yet — that's fine. A little more practice, no pressure.</p>`;
+  } else if (q.kind === 'practice' && p.practiceRoundsCompleted < 3){
+    const remaining = 3 - p.practiceRoundsCompleted;
+    gateNote = `<p class="lede">${remaining} more practice round${remaining === 1 ? '' : 's'} until we check in on unlocking the next letter.</p>`;
+  }
+
+  // Manual skip: available from round 3 onward (same minimum the gate itself
+  // uses), so a parent can move on early without waiting for 70% or the
+  // round-5 forced unlock. Kept deliberately secondary/lower-emphasis so it
+  // doesn't compete with "Keep going," and tracked separately from an earned
+  // unlock (completionType: 'skipped') so the level map stays honest rather
+  // than quietly showing it as mastered.
+  const idx = PHONICS_ORDER.indexOf(activeKey);
+  const hasNextLetter = idx < PHONICS_ORDER.length - 1;
+  const canSkip = q.kind === 'practice' && p.practiceRoundsCompleted >= 3 && hasNextLetter;
+
+  const suggestStop = sessionRoundCount >= 3 && !sessionEndedEarly;
+  screen.innerHTML = `
+    <div class="eyebrow">${q.kind === 'practice' ? 'Practice' : 'Review'} complete</div>
+    <div class="summary-stat">${q.correct} / ${q.targets.length}</div>
+    <p class="lede">${pct}% this round.</p>
+    ${gateNote}
+    <div class="btn-row">
+      <button class="btn" id="continueBtn">Keep going →</button>
+      ${suggestStop ? '<button class="btn secondary" id="stopBtn">Stop for today 🌙</button>' : ''}
+    </div>
+    ${canSkip ? `<button class="name-pill" id="skipBtn">Skip to letter ${PHONICS_ORDER[idx+1]} instead →</button>` : ''}
+    ${suggestStop ? '<p class="tap-hint">Great work today — it\'s fine to stop any time. Rounds are never blocked.</p>' : ''}
+  `;
+  document.getElementById('continueBtn').addEventListener('click', nextRound);
+  const stopBtn = document.getElementById('stopBtn');
+  if (stopBtn) stopBtn.addEventListener('click', () => { sessionEndedEarly = true; renderSessionEnd(); });
+  const skipBtn = document.getElementById('skipBtn');
+  if (skipBtn) skipBtn.addEventListener('click', () => {
+    unlockNextLetter('skipped');
+    renderSkipTransition();
+  });
+}
+
+function renderSessionEnd(){
+  setFootNote('');
+  screen.innerHTML = `
+    <div class="eyebrow">See you soon</div>
+    <div class="hero-letter">👋</div>
+    <h1 class="screen-title">Great work today!</h1>
+    <p class="lede">Come back tomorrow — new review words will be waiting.</p>
+    <div class="btn-row"><button class="btn secondary" id="restartBtn">Keep playing anyway</button></div>
+  `;
+  document.getElementById('restartBtn').addEventListener('click', () => { sessionEndedEarly = false; nextRound(); });
+}
+
+function unlockNextLetter(){
+  const idx = PHONICS_ORDER.indexOf(activeKey);
+  const nextKey = PHONICS_ORDER[idx + 1];
+  if (nextKey) letterProgress[nextKey].unlocked = true;
+}
+
+function renderUnlockCelebration(gateResult){
+  setFootNote('');
+  const idx = PHONICS_ORDER.indexOf(activeKey);
+  const nextKey = PHONICS_ORDER[idx + 1];
+  const forcedNote = gateResult.forced
+    ? `<p class="lede">Five rounds done — moving on now regardless of score, exactly as the mastery gate promises. No wall, ever.</p>`
+    : `<p class="lede">${Math.round(gateResult.avg * 100)}% across the last two rounds — well past the 70% mark.</p>`;
+  const nextBlock = nextKey ? `
+    <div class="hero-word-card" style="cursor:default;">
+      ${pictureHTML(LETTER_DATA[nextKey].hero, LETTER_DATA[nextKey].heroEmoji, 'hero-word-emoji')}
+      <div class="hero-word-label">Letter ${nextKey} is next</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" id="goNext">Start letter ${nextKey} →</button>
+      <button class="btn secondary" id="backToMap">Back to map</button>
+    </div>
+  ` : `
+    <p class="lede">That's all 26 letters — Book 1's phonics sequence is complete!</p>
+    <div class="btn-row"><button class="btn secondary" id="backToMap">Back to map</button></div>
+  `;
+  screen.innerHTML = `
+    <div class="eyebrow">Letter unlocked!</div>
+    <div class="hero-letter">🎉</div>
+    <h1 class="screen-title">Amazing! You've finished ${activeKey}</h1>
+    ${forcedNote}
+    ${nextBlock}
+  `;
+  if (nextKey){
+    document.getElementById('goNext').addEventListener('click', () => {
+      activeKey = nextKey;
+      nextRound();
+    });
+  }
+  document.getElementById('backToMap').addEventListener('click', renderLevelMap);
+}
+
+// ---------------- LEVEL MAP ----------------
+function renderLevelMap(){
+  setFootNote('Tap any unlocked letter to jump to it. Locked letters open once the one before them is mastered.');
+  const nodes = PHONICS_ORDER.map((key, idx) => {
+    const p = letterProgress[key];
+    const mastered = idx < PHONICS_ORDER.length - 1 && letterProgress[PHONICS_ORDER[idx+1]].unlocked;
+    let cls = 'locked';
+    if (mastered) cls = 'mastered';
+    else if (key === activeKey) cls = 'current';
+    else if (p.unlocked) cls = 'unlocked';
+    return `<button class="map-node ${cls}" data-key="${key}" ${p.unlocked ? '' : 'disabled'}>
+      <div class="circle">${mastered ? '✓' : (p.unlocked ? key : '🔒')}</div>
+      <div class="node-label">${key}</div>
+    </button>`;
+  }).join('');
+
+  screen.innerHTML = `
+    <div class="eyebrow">Book 1 · Letter path</div>
+    <h1 class="screen-title">Pick a letter</h1>
+    <div class="map-scroll"><div class="map-track">${nodes}</div></div>
+    <div class="map-legend">
+      <span><span class="legend-dot" style="background:var(--mint);"></span>Mastered</span>
+      <span><span class="legend-dot" style="background:var(--coral);"></span>Current</span>
+      <span><span class="legend-dot" style="background:var(--sun);"></span>Unlocked</span>
+      <span><span class="legend-dot" style="background:rgba(27,58,75,0.2);"></span>Locked</span>
+    </div>
+    <div class="btn-row"><button class="btn" id="continueHere">Continue with ${activeKey} →</button></div>
+  `;
+  [...document.querySelectorAll('.map-node')].forEach(btn => {
+    if (btn.disabled) return;
+    btn.addEventListener('click', () => {
+      activeKey = btn.dataset.key;
+      nextRound();
+    });
+  });
+  document.getElementById('continueHere').addEventListener('click', nextRound);
+}
+
+// ---------------- Boot ----------------
+if ('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {
+      // Offline caching just won't be available this session — the app
+      // still works fully online, so this is a soft failure, not fatal.
+    });
+  });
+}
+refreshHeader();
+renderDots();
+nextRound();
+</script>
+</body>
+</html>
