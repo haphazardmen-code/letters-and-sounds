@@ -38,8 +38,10 @@
   }
   .stage{
     width:100%;
-    max-width:960px;
+    max-width:min(1400px, 92vw);
     aspect-ratio:16/9;
+    container-type:inline-size;
+    container-name:appstage;
     background:var(--card);
     border-radius:28px;
     box-shadow:0 20px 50px rgba(27,58,75,0.18), 0 2px 0 rgba(27,58,75,0.05);
@@ -88,14 +90,27 @@
   }
   .icon-btn:active{transform:translateY(2px);box-shadow:none;}
   main{
-    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    flex:1; display:flex; flex-direction:column; align-items:center;
+    justify-content:flex-start; justify-content:safe center;
     padding:26px; overflow:auto; gap:16px; text-align:center;
   }
   .eyebrow{ font-weight:800; letter-spacing:0.06em; text-transform:uppercase; font-size:12px; color:var(--coral-deep); }
-  h1.screen-title{ font-family:'Baloo 2',sans-serif; font-size:clamp(22px,3.4vw,32px); margin:0; }
-  .lede{ font-size:15px; color:rgba(27,58,75,0.75); max-width:480px; line-height:1.5; margin:0; }
+  h1.screen-title{
+    font-family:'Baloo 2',sans-serif; margin:0;
+    font-size:clamp(22px, 3.4vw, 40px);
+    font-size:clamp(22px, 3.4cqw, 40px);
+  }
+  .lede{
+    color:rgba(27,58,75,0.75); line-height:1.5; margin:0;
+    max-width:480px;
+    max-width:min(480px, 60cqw);
+    font-size:clamp(14px, 1.3vw, 19px);
+    font-size:clamp(14px, 1.3cqw, 19px);
+  }
   .hero-letter{
-    font-family:'Baloo 2',sans-serif; font-weight:800; font-size:110px; line-height:1;
+    font-family:'Baloo 2',sans-serif; font-weight:800; line-height:1;
+    font-size:clamp(80px, 12vw, 160px);
+    font-size:clamp(80px, 12cqw, 160px);
     color:var(--coral); cursor:pointer; user-select:none; transition:transform 0.15s ease;
   }
   .hero-letter:active{transform:scale(0.92);}
@@ -116,7 +131,11 @@
   img.hero-word-emoji{ width:44px; height:44px; object-fit:contain; display:block; }
   .hero-word-label{ font-family:'Baloo 2',sans-serif; font-weight:700;font-size:22px; text-transform:capitalize; }
   .tap-hint{font-size:12px;font-weight:700;color:rgba(27,58,75,0.5);}
-  .card-grid{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; width:100%; max-width:560px; }
+  .card-grid{
+    display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; width:100%;
+    max-width:560px;
+    max-width:min(760px, 70cqw);
+  }
   .picture-card{
     background:var(--sky); border-radius:18px; padding:14px 8px 10px;
     display:flex;flex-direction:column;align-items:center;gap:6px; cursor:pointer;
@@ -124,19 +143,42 @@
     position:relative;
   }
   .picture-card:active{transform:scale(0.94);}
-  .picture-card .emoji{font-size:38px;}
-  .picture-card img.emoji{ width:56px; height:56px; object-fit:contain; }
+  .picture-card .emoji{
+    font-size:38px;
+    font-size:clamp(38px, 4vw, 64px);
+    font-size:clamp(38px, 4cqw, 64px);
+  }
+  .picture-card img.emoji{
+    width:56px; height:56px;
+    width:clamp(56px, 4cqw, 84px); height:clamp(56px, 4cqw, 84px);
+    object-fit:contain;
+  }
   .picture-card .label{ font-weight:700;font-size:12px; text-transform:capitalize; color:rgba(27,58,75,0.7); }
   .picture-card.correct{background:var(--mint);border-color:var(--mint-deep);}
   .picture-card.correct .label{color:#fff;}
   .picture-card.wrong{background:#FFE3DD;border-color:var(--coral);}
   .picture-card.disabled{pointer-events:none;opacity:0.55;}
+  /* TV remote / keyboard focus — deliberately strong and high-contrast,
+     since without a cursor this outline is the ONLY way to see what's
+     currently selected. Applied to plain :focus (not just :focus-visible)
+     for broadest compatibility across TV browser engines, some of which
+     don't support :focus-visible at all. */
+  .picture-card:focus, .hero-letter:focus, .hero-word-card:focus,
+  .quiz-prompt:focus, .btn:focus, .icon-btn:focus, .name-pill:focus,
+  .map-node:focus{
+    outline:4px solid var(--coral-deep);
+    outline-offset:3px;
+    box-shadow:0 0 0 4px rgba(255,111,89,0.25);
+  }
   .picture-card .src-tag{
     position:absolute; top:4px; left:6px; font-size:9px; font-weight:800;
     color:rgba(27,58,75,0.35); text-transform:uppercase;
   }
   .btn{
-    font-family:'Baloo 2',sans-serif; font-weight:700; font-size:16px; border:none; border-radius:16px;
+    font-family:'Baloo 2',sans-serif; font-weight:700; border:none; border-radius:16px;
+    font-size:16px;
+    font-size:clamp(16px, 1.4vw, 22px);
+    font-size:clamp(16px, 1.4cqw, 22px);
     padding:13px 30px; cursor:pointer; color:#fff; background:var(--coral);
     box-shadow:0 4px 0 var(--coral-deep); transition:transform 0.08s ease;
   }
@@ -163,6 +205,17 @@
   .voice-panel label{font-size:12px;font-weight:800;display:block;margin-bottom:6px;}
   .voice-panel select{ width:100%;padding:8px;border-radius:10px;border:1px solid rgba(27,58,75,0.15); font-family:'Nunito';font-weight:700;font-size:13px; }
   .voice-panel .close-voice{ margin-top:10px;width:100%; background:var(--sky);border:none;border-radius:10px;padding:6px; font-weight:700;font-size:12px;cursor:pointer; }
+
+  /* COVER / LANDING SCREEN */
+  .cover-flourish{ font-size:22px; letter-spacing:6px; opacity:0.8; }
+  .cover-preview-row{ display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:4px; }
+  .cover-preview-item{ display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .cover-preview-item .circle{
+    width:44px;height:44px;border-radius:50%; display:flex;align-items:center;justify-content:center;
+    font-family:'Baloo 2',sans-serif; font-weight:800; font-size:18px;
+  }
+  .cover-preview-emoji{ font-size:34px; }
+  img.cover-preview-emoji{ width:40px; height:40px; object-fit:contain; }
 
   /* LEVEL MAP */
   .map-scroll{ width:100%; max-width:760px; overflow-x:auto; padding-bottom:6px; }
@@ -196,6 +249,7 @@
     #voiceToggle::before{ content:"🔊"; }
     #mapToggle::before{ content:"🗺️"; }
     #soundToggle::before{ content:"🎵"; }
+    #homeToggle::before{ content:"🏠"; }
     main{ padding:18px 16px 8px; gap:14px; justify-content:flex-start; padding-top:24px; }
     .hero-letter{ font-size:clamp(64px,26vw,100px); }
     .hero-word-card{ padding:14px 20px; }
@@ -215,6 +269,19 @@
     .summary-stat{ font-size:38px; }
     .voice-panel{ top:auto; bottom:0; left:0; right:0; width:100%; border-radius:20px 20px 0 0; padding:20px; }
   }
+  /* SHORT LANDSCAPE WINDOWS — a wide desktop/tablet browser window that
+     isn't very tall (common when the window isn't maximised) can still be
+     shorter than the 16:9 box's content needs. This compacts spacing so
+     more fits without scrolling, on top of the earlier flex fix that
+     already stops content from being unreachably clipped either way.
+     Placed at the end of the stylesheet deliberately — CSS cascade order
+     matters here as much as the media condition does. */
+  @media (max-height:650px) and (min-width:641px){
+    main{ padding:16px 26px; gap:10px; }
+    .hero-letter{ font-size:72px; }
+    .cover-flourish{ font-size:16px; }
+    .lede{ font-size:14px; }
+  }
 </style>
 </head>
 <body>
@@ -230,6 +297,7 @@
     </div>
     <div class="header-right">
       <div class="progress-dots" id="progressDots"></div>
+      <button class="icon-btn" id="homeToggle">🏠 Home</button>
       <button class="icon-btn" id="mapToggle">🗺️ Map</button>
       <button class="icon-btn" id="soundToggle">🎵 Sound</button>
       <button class="icon-btn" id="voiceToggle">🔊 Voice</button>
@@ -465,8 +533,10 @@ const headerSub = document.getElementById('headerSub');
 let voices = [];
 let chosenVoice = null;
 let voicesReady = false;
+const HAS_SPEECH = ('speechSynthesis' in window);
 
 function loadVoices(){
+  if (!HAS_SPEECH) return;
   voices = speechSynthesis.getVoices();
   if (!voices.length) return;
   voicesReady = true;
@@ -493,14 +563,44 @@ function loadVoices(){
     select.value = chosenVoice.name;
   }
 }
-speechSynthesis.onvoiceschanged = loadVoices;
-loadVoices();
+// Everything below only runs where the Web Speech API genuinely exists.
+// Some sandboxed webviews (e.g. in-app preview browsers) don't implement
+// it at all — speechSynthesis is fully undefined there, not just empty —
+// so touching it as a bare reference throws immediately and previously
+// crashed the whole script before the page could render anything.
+if (HAS_SPEECH){
+  speechSynthesis.onvoiceschanged = loadVoices;
+  loadVoices();
+}
 let voicePollAttempts = 0;
 const voicePoll = setInterval(() => {
   voicePollAttempts++;
-  if (voicesReady || voicePollAttempts > 20){ clearInterval(voicePoll); return; }
+  if (voicesReady){ clearInterval(voicePoll); return; }
+  if (!HAS_SPEECH || voicePollAttempts > 20){
+    clearInterval(voicePoll);
+    showNoVoiceWarning();
+    return;
+  }
   loadVoices();
 }, 150);
+
+// Some devices (a fair number of Smart TV browsers among them) report
+// speechSynthesis as present but never actually supply any voices — TTS
+// there normally isn't tied to accessibility features the way it is on
+// phones/desktops. Rather than fail silently, say so plainly.
+function showNoVoiceWarning(){
+  const select = document.getElementById('voiceSelect');
+  select.innerHTML = '<option>No voices found on this device</option>';
+  select.disabled = true;
+  const panel = document.getElementById('voicePanel');
+  if (panel && !document.getElementById('noVoiceNote')){
+    const note = document.createElement('p');
+    note.id = 'noVoiceNote';
+    note.style.cssText = 'font-size:11px; color:var(--coral-deep); font-weight:700; margin:8px 0 0;';
+    note.textContent = "This device doesn't appear to have any text-to-speech voices installed, so spoken audio won't play here — this is a device limitation, not an app setting.";
+    panel.insertBefore(note, panel.querySelector('.close-voice'));
+  }
+}
 
 document.getElementById('voiceSelect').addEventListener('change', (e) => {
   chosenVoice = voices.find(v => v.name === e.target.value) || null;
@@ -617,6 +717,37 @@ function pictureHTML(word, emoji, sizeClass){
             onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'${sizeClass}',textContent:'${emoji}'}))">`;
 }
 
+// ---------------- Word audio: real recording first, TTS fallback ----------------
+// Same fallback pattern as pictureHTML above, and for the same reason: this
+// is the actual long-term fix for two separate problems raised in testing —
+// (1) devices with no installed TTS voices at all (e.g. this app's own TV
+// testing) can't be fixed by any code, only by not depending on the OS
+// voice; (2) TTS categorically cannot produce an isolated stop consonant
+// correctly (t/p/b/d/g/k/c/q/j/x always come out "tuh/puh/etc" — a real,
+// unfixable phonics-accuracy gap, not a bug). A real recording in
+// audio/words/<word>.mp3 fixes both at once. Until that file exists for a
+// given word, this transparently falls back to the existing TTS behaviour
+// — nothing breaks in the meantime, exactly like the image system.
+function speakWord(word, rate){
+  const src = `audio/words/${slugify(word)}.mp3`;
+  let fellBack = false;
+  const fallbackToTTS = () => {
+    if (fellBack) return;
+    fellBack = true;
+    speak(word, rate);
+  };
+  try {
+    const audio = new Audio(src);
+    audio.addEventListener('error', fallbackToTTS, { once: true });
+    const playResult = audio.play();
+    if (playResult && typeof playResult.catch === 'function'){
+      playResult.catch(fallbackToTTS);
+    }
+  } catch (e) {
+    fallbackToTTS();
+  }
+}
+
 // ---------------- Helpers ----------------
 function shuffle(arr){
   const a = [...arr];
@@ -718,9 +849,9 @@ function renderIntro(){
   setFootNote('Intro round · always round 1 for a new letter · not scored');
   screen.innerHTML = `
     <div class="eyebrow">Meet the letter</div>
-    <div class="hero-letter" id="heroLetter">${activeKey}</div>
+    <div class="hero-letter" id="heroLetter" tabindex="0" role="button" aria-label="Hear the letter's name">${activeKey}</div>
     <button class="name-pill" id="phoneticToggle">${meta.phonetic}</button>
-    <div class="hero-word-card" id="heroWordCard">
+    <div class="hero-word-card" id="heroWordCard" tabindex="0" role="button" aria-label="Hear the word ${L.hero}">
       ${pictureHTML(L.hero, L.heroEmoji, 'hero-word-emoji')}
       <div class="hero-word-label">${L.hero}</div>
     </div>
@@ -784,8 +915,11 @@ function renderStaticGrid(words){
   words.forEach(w => {
     const card = document.createElement('div');
     card.className = 'picture-card';
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', `Hear ${w.word}`);
     card.innerHTML = `${pictureHTML(w.word, w.emoji, 'emoji')}<div class="label">${w.word}</div>`;
-    card.addEventListener('click', () => speak(w.word));
+    card.addEventListener('click', () => speakWord(w.word));
     grid.appendChild(card);
   });
 }
@@ -803,22 +937,25 @@ function showQuizQuestion(){
   setFootNote(`${q.kind === 'practice' ? 'Practice' : 'Review'} · question ${q.index + 1} of ${q.targets.length}`);
   screen.innerHTML = `
     <div class="eyebrow">${q.kind === 'practice' ? 'Practice game' : 'Review game'}</div>
-    <div class="quiz-prompt" id="replayPrompt">🔊 Find: <strong>${target.word}</strong> — tap to hear again</div>
+    <div class="quiz-prompt" id="replayPrompt" tabindex="0" role="button" aria-label="Hear ${target.word} again">🔊 Find: <strong>${target.word}</strong> — tap to hear again</div>
     <div class="card-grid" id="grid"></div>
     <div class="feedback-banner" id="feedback"></div>
   `;
-  document.getElementById('replayPrompt').addEventListener('click', () => speak(target.word));
+  document.getElementById('replayPrompt').addEventListener('click', () => speakWord(target.word));
   q.firstAttemptMade = false;
   const grid = document.getElementById('grid');
   shuffle(q.displayWords).forEach(w => {
     const card = document.createElement('div');
     card.className = 'picture-card';
     card.dataset.word = w.word;
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', `Choose ${w.word}`);
     card.innerHTML = `${pictureHTML(w.word, w.emoji, 'emoji')}<div class="label">${w.word}</div>`;
     card.addEventListener('click', () => handleQuizTap(card, w, target));
     grid.appendChild(card);
   });
-  speak(target.word);
+  speakWord(target.word);
 }
 
 function handleQuizTap(cardEl, tapped, target){
@@ -848,7 +985,7 @@ function handleQuizTap(cardEl, tapped, target){
     cardEl.classList.add('wrong');
     feedback.textContent = 'Have another listen and try again.';
     feedback.className = 'feedback-banner gentle';
-    speak(target.word);
+    speakWord(target.word);
     setTimeout(() => cardEl.classList.remove('wrong'), 700);
   }
 }
@@ -1021,6 +1158,126 @@ function renderLevelMap(){
   document.getElementById('continueHere').addEventListener('click', nextRound);
 }
 
+// ---------------- TV remote / keyboard navigation ----------------
+// Real <button> elements get Enter/Space "click" behaviour for free from
+// the browser, and Tab-order for free too — but several interactive
+// elements here are plain divs (picture cards, hero letter/word) that
+// needed tabindex added above to be focusable at all. Arrow keys don't
+// move focus natively for ANYTHING, though — that's not a browser
+// omission, arrow-key spatial navigation simply isn't a native web
+// behaviour, so it has to be built: find the nearest focusable element in
+// the pressed direction by comparing actual on-screen positions.
+const FOCUSABLE_SELECTOR = 'button:not(:disabled), [tabindex]:not([disabled])';
+
+function getFocusableElements(){
+  return [...document.querySelectorAll(FOCUSABLE_SELECTOR)].filter(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.width === 0 && rect.height === 0) return false;
+    const style = window.getComputedStyle(el);
+    return style.visibility !== 'hidden' && style.display !== 'none';
+  });
+}
+
+function focusNearestInDirection(direction){
+  const focusables = getFocusableElements();
+  if (!focusables.length) return;
+  const active = document.activeElement;
+  const activeRect = (active && focusables.includes(active))
+    ? active.getBoundingClientRect()
+    : { left:0, top:0, right:0, bottom:0, width:0, height:0 };
+  const cx = activeRect.left + activeRect.width / 2;
+  const cy = activeRect.top + activeRect.height / 2;
+
+  let best = null, bestDist = Infinity;
+  focusables.forEach(el => {
+    if (el === active) return;
+    const r = el.getBoundingClientRect();
+    const ex = r.left + r.width / 2;
+    const ey = r.top + r.height / 2;
+    const dx = ex - cx, dy = ey - cy;
+
+    let inDirection = false;
+    if (direction === 'ArrowDown')  inDirection = dy > 4;
+    if (direction === 'ArrowUp')    inDirection = dy < -4;
+    if (direction === 'ArrowRight') inDirection = dx > 4;
+    if (direction === 'ArrowLeft')  inDirection = dx < -4;
+    if (!inDirection) return;
+
+    // Cross-axis weighted heavier so movement feels straight rather than
+    // jumping diagonally to a technically-closer element.
+    const vertical = (direction === 'ArrowDown' || direction === 'ArrowUp');
+    const primary = vertical ? Math.abs(dy) : Math.abs(dx);
+    const cross = vertical ? Math.abs(dx) : Math.abs(dy);
+    const dist = primary + cross * 2.2;
+    if (dist < bestDist){ bestDist = dist; best = el; }
+  });
+
+  if (best) best.focus();
+  else if (!active || active === document.body) focusables[0].focus();
+}
+
+document.addEventListener('keydown', (e) => {
+  if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)){
+    e.preventDefault();
+    focusNearestInDirection(e.key);
+    return;
+  }
+  if (e.key === 'Enter' || e.key === ' '){
+    const el = document.activeElement;
+    if (el && el.matches && el.matches(FOCUSABLE_SELECTOR) && el !== document.body){
+      e.preventDefault();
+      el.click();
+    }
+  }
+});
+
+// Every screen transition replaces #screen's innerHTML, which silently
+// drops keyboard focus back to <body> — a dead end for a remote user with
+// no cursor to click their way back in. Auto-focus the first sensible
+// target on every render so an arrow-key press always has somewhere to
+// start from.
+new MutationObserver(() => {
+  const active = document.activeElement;
+  if (active && screen.contains(active)) return; // something inside already focused, leave it
+  const first = screen.querySelector(FOCUSABLE_SELECTOR);
+  if (first) first.focus();
+}).observe(screen, { childList: true });
+
+// ---------------- COVER / LANDING SCREEN ----------------
+function renderCoverScreen(){
+  setFootNote('');
+  const previewLetters = PHONICS_ORDER.slice(0, 4); // s,a,t,p — the actual teaching order, not a random pick
+  const previewHTML = previewLetters.map(k => {
+    const L = LETTER_DATA[k];
+    return `<div class="cover-preview-item">
+       <div class="circle" style="background:var(--sky); color:var(--coral-deep);">${k}</div>
+       ${pictureHTML(L.hero, L.heroEmoji, 'cover-preview-emoji')}
+     </div>`;
+  }).join('');
+
+  screen.innerHTML = `
+    <div class="cover-flourish">🌈 ✨ 🎈 ⭐ 🦋</div>
+    <div class="eyebrow">Foundation · Book 1</div>
+    <h1 class="screen-title" style="font-size:clamp(28px,5vw,40px);">Letters &amp; Sounds</h1>
+    <p class="lede">British-English phonics, in the real teaching order — s, a, t, p, and onward — so every word your child sounds out actually decodes, right from day one.</p>
+    <div class="cover-preview-row">${previewHTML}</div>
+    <div class="btn-row">
+      <button class="btn" id="startAppBtn">Let's begin! →</button>
+    </div>
+    <button class="name-pill" id="browseMapBtn">See all 26 letters first</button>
+  `;
+  document.getElementById('startAppBtn').addEventListener('click', () => {
+    refreshHeader();
+    renderDots();
+    nextRound();
+  });
+  document.getElementById('browseMapBtn').addEventListener('click', () => {
+    refreshHeader();
+    renderLevelMap();
+  });
+}
+document.getElementById('homeToggle').addEventListener('click', renderCoverScreen);
+
 // ---------------- Boot ----------------
 if ('serviceWorker' in navigator){
   window.addEventListener('load', () => {
@@ -1030,9 +1287,7 @@ if ('serviceWorker' in navigator){
     });
   });
 }
-refreshHeader();
-renderDots();
-nextRound();
+renderCoverScreen();
 </script>
 </body>
 </html>
